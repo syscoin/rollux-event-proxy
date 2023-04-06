@@ -1,0 +1,15 @@
+{
+    "name": "l2-api-data-collector",
+    "description": "",
+    "dependencies": {
+        "sequelize": "6.30.0",
+        "dotenv": "16.0.3",
+        "node-fetch": "3.3.1",
+        "pg": "^8.10.0",
+        "ethers": "^5.7.2",
+        "@eth-optimism/sdk": "^2.0.1"
+    },
+    "scripts": {
+        "start": "node ./index.js"
+    }
+}

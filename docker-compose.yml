@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  api-gateway:
+    restart: always
+    build: ./api-gateway
+    depends_on:
+      - db
+    volumes:
+      - ./api-gateway/src:/var/api-gateway/src
+    environment:
+      - DB_USER=user
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    ports:
+      - "8080:8080"
+  data-collector:
+    restart: always
+    build: ./data-collector/
+    depends_on:
+      - db
+    volumes: 
+      - ./data-collector/src:/var/data-collector/src
+    environment:
+      - DB_USER=user
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - L1_RPC_URL=${L1_RPC_URL}
+      - L2_RPC_URL=${L2_RPC_URL}
+      - L1_CHAIN_ID=${L1_CHAIN_ID}
+      - L2_CHAIN_ID=${L2_CHAIN_ID}
+      - BLOCKSCOUT_API_URL=${BLOCKSCOUT_API_URL}
+      - DATA_COLLECTOR_ENABLE_DEPOSITS=${DATA_COLLECTOR_ENABLE_DEPOSITS}
+      - DATA_COLLECTOR_ENABLE_WITHDRAWALS=${DATA_COLLECTOR_ENABLE_WITHDRAWALS}
+      - DATA_COLLECTOR_ENABLE_WATHCHER=${DATA_COLLECTOR_ENABLE_WATHCHER}
+      - DATA_COLLECTOR_INITIAL_CHECK_TIMEOUT=${DATA_COLLECTOR_INITIAL_CHECK_TIMEOUT}
+      - DATA_COLLECTOR_BEFORE_UNLOCK_TIMEOUT=${DATA_COLLECTOR_BEFORE_UNLOCK_TIMEOUT}
+  db:
+    build: ./database
+    ports:
+      - '5433:${DB_PORT}'
+    volumes:
+      - data:/database/db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+
+volumes:
+  data: {}
